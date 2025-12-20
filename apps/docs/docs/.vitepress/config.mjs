@@ -44,6 +44,16 @@ export default defineConfig({
           { text: '友情链接管理', link: '/guide/friend-link' },
           { text: '评论互动系统', link: '/guide/comment-system' }
         ]
+      },
+      {
+        text: '高级开发',
+        items: [
+          { text: '后台扩展与页面开发', link: '/guide/admin-customization' },
+          { text: 'Turborepo 使用指南', link: '/guide/turborepo-usage' },
+          { text: '插件事件钩子', link: '/guide/hook-system' },
+          { text: '自定义API响应格式', link: '/guide/api-customization' },
+          { text: '自定义字段类型', link: '/guide/custom-fields' }
+        ]
       }
     ],
 
