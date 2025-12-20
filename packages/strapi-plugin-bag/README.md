@@ -63,6 +63,7 @@ npm run dev
 插件自动暴露了标准的 Strapi Content API。所有接口均支持权限控制，请在 **Settings > Users & Permissions Plugin > Roles** 中开启相应权限。
 
 常用端点：
+
 - `GET /api/bag/articles` - 获取文章列表
 - `GET /api/bag/menus/:slug` - 获取指定标识的导航菜单（树形结构）
 - `POST /api/bag/comments` - 提交评论
@@ -71,14 +72,13 @@ npm run dev
 ## 📖 详细文档
 
 更多详细的使用指南、API 参考及前端集成示例，请访问：
-[👉 查看在线文档](https://vite.itnavs.com/)
+[👉 查看在线文档](https://hangjob.github.io/strapi-plugin-bag/)
 
 ## 🤝 贡献与反馈
 
 如果您在使用过程中发现任何问题或有更好的功能建议，欢迎提交 Issue 或 Pull Request。
 
 - **GitHub**: [hangjob/strapi-plugin-bag](https://github.com/hangjob/strapi-plugin-bag)
-- **官网**: [itnavs.com](https://www.itnavs.com/)
 
 ## 📄 开源协议
 

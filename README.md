@@ -44,7 +44,7 @@ pnpm dev
 
 ## 📖 详细文档
 
-请参阅 `apps/docs` 或访问 [在线手册](https://vite.itnavs.com/)。
+请参阅 `apps/docs` 或访问 [在线手册](https://hangjob.github.io/strapi-plugin-bag/)。
 
 ---
 
