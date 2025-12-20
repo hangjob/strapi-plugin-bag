@@ -25,7 +25,8 @@ export default defineConfig({
         text: '入门',
         items: [
           { text: '简介', link: '/guide/introduction' },
-          { text: '安装', link: '/guide/installation' }
+          { text: '安装', link: '/guide/installation' },
+          { text: '提交规范', link: '/guide/commit-convention' }
         ]
       },
       {
