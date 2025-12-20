@@ -13,10 +13,7 @@ hero:
       text: 开始
       link: /guide/introduction
     - theme: alt
-      text: 🤗 首页
-      link: https://vite.itnavs.com/
-    - theme: alt
-      text: 在 GitHub 上查看
+      text: 🤗 在 GitHub 上查看
       link: https://github.com/hangjob/strapi-plugin-bag
 
 features:
@@ -47,7 +44,6 @@ features:
   - icon: 🛠️
     title: 高度可扩展
     details: 采用模块化设计，支持用户自定义扩展内容类型字段，灵活满足各类业务需求。
-
 ---
 
 <style>

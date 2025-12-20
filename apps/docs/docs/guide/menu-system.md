@@ -13,12 +13,18 @@
 ## 如何配置
 
 ### 1. 创建菜单 (Menu)
+
 在 Strapi 后台的 `Content Manager` 中找到 `Bag - 菜单 (Menu)`：
+
+![菜单管理列表](/screenshots/content-manager.png)
+
 - **标题 (Title)**: 菜单的友好名称，如“主导航”。
 - **标识符 (Slug)**: 唯一的标识，API 调用时使用，如 `main-nav`。
 
 ### 2. 添加菜单项 (Menu Item)
+
 在 `Bag - 菜单项 (Menu Item)` 中添加具体的链接：
+
 - **标题 (Title)**: 菜单显示的文字。
 - **URL**: 链接地址（可以是相对路径 `/blog` 或绝对路径 `https://...`）。
 - **图标 (Icon)**: 可选，填入图标名称。
@@ -34,11 +40,13 @@
 **接口地址:** `GET /api/bag/menus/:slug`
 
 ### 示例请求
+
 ```bash
 GET http://localhost:1337/api/bag/menus/main-nav
 ```
 
 ### 响应示例
+
 ```json
 {
   "data": {
@@ -89,5 +97,3 @@ GET http://localhost:1337/api/bag/menus/main-nav
 3. 重新启动项目。
 
 所有自定义扩展的字段将**自动包含**在 `/api/bag/menus/:slug` 接口的返回结果中。
-
-
