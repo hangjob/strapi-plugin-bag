@@ -3,11 +3,12 @@ import { defineConfig } from 'vitepress'
 export default defineConfig({
   title: "Strapi Plugin Bag",
   description: "一站式 Strapi 综合增强工具包使用手册",
+  base: '/strapi-plugin-bag/',
   head: [
-    ['link', {rel: 'icon', href: '/public/logo-min.png'}]
+    ['link', {rel: 'icon', href: '/strapi-plugin-bag/logo-min.png'}]
   ],
   themeConfig: {
-    logo: '/logo.png',
+    logo: '/logo-min.png',
     nav: [
       { text: '首页', link: '/' },
       { text: '指南', link: '/guide/introduction' },
