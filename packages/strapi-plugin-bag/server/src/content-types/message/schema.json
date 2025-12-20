@@ -1,0 +1,54 @@
+{
+  "kind": "collectionType",
+  "collectionName": "bag_messages",
+  "info": {
+    "singularName": "message",
+    "pluralName": "messages",
+    "displayName": "留言板管理",
+    "description": "管理用户提交的留言与反馈建议"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {
+    "content-manager": {
+      "visible": true
+    }
+  },
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "contact": {
+      "type": "string",
+      "required": true
+    },
+    "title": {
+      "type": "string"
+    },
+    "content": {
+      "type": "text",
+      "required": true
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": [
+        "pending",
+        "replied",
+        "closed"
+      ],
+      "default": "pending"
+    },
+    "ip": {
+      "type": "string"
+    },
+    "ua": {
+      "type": "string"
+    },
+    "adminNotes": {
+      "type": "text"
+    }
+  }
+}
+

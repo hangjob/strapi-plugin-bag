@@ -1,0 +1,30 @@
+{
+  "kind": "collectionType",
+  "collectionName": "refresh_tokens",
+  "info": {
+    "singularName": "refresh-token",
+    "pluralName": "refresh-tokens",
+    "displayName": "刷新令牌管理",
+    "description": "用于长效保持登录状态的令牌记录"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "token": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "expiresAt": {
+      "type": "datetime",
+      "required": true
+    },
+    "user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user"
+    }
+  }
+}
+

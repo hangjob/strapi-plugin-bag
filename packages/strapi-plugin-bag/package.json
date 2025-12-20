@@ -1,0 +1,81 @@
+{
+  "version": "1.0.1",
+  "keywords": [
+    "strapi",
+    "strapi-plugin",
+    "strapi-v5",
+    "cms",
+    "security",
+    "authentication",
+    "captcha",
+    "encryption",
+    "article-management",
+    "menu-navigation",
+    "website-builder"
+  ],
+  "type": "commonjs",
+  "engines": {
+    "node": ">=22.10.0"
+  },
+  "exports": {
+    "./package.json": "./package.json",
+    "./strapi-admin": {
+      "source": "./admin/src/index.js",
+      "import": "./dist/admin/index.mjs",
+      "require": "./dist/admin/index.js",
+      "default": "./dist/admin/index.js"
+    },
+    "./strapi-server": {
+      "source": "./server/src/index.js",
+      "import": "./dist/server/index.mjs",
+      "require": "./dist/server/index.js",
+      "default": "./dist/server/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "server",
+    "admin"
+  ],
+  "scripts": {
+    "build": "strapi-plugin build",
+    "dev": "strapi-plugin watch",
+    "watch": "strapi-plugin watch",
+    "watch:link": "strapi-plugin watch:link",
+    "verify": "strapi-plugin verify"
+  },
+  "dependencies": {
+    "@strapi/design-system": "^2.0.0-rc.30",
+    "@strapi/icons": "^2.0.0-rc.30",
+    "react-intl": "^8.0.4",
+    "svg-captcha": "^1.4.0"
+  },
+  "devDependencies": {
+    "@strapi/sdk-plugin": "^5.3.2",
+    "@strapi/strapi": "^5.32.0",
+    "prettier": "^3.7.4",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.30.2",
+    "styled-components": "^6.1.19"
+  },
+  "peerDependencies": {
+    "@strapi/sdk-plugin": "^5.3.2",
+    "@strapi/strapi": "^5.32.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.30.2",
+    "styled-components": "^6.1.19"
+  },
+  "strapi": {
+    "kind": "plugin",
+    "name": "strapi-plugin-bag",
+    "displayName": "Strapi Plugin Bag",
+    "description": "A comprehensive website building toolkit for Strapi 5, including security, content management, and visual components."
+  },
+  "name": "strapi-plugin-bag",
+  "description": "一站式 Strapi 5 综合增强解决方案。深度集成安全加固（IP限制、RSA/AES加密、验证码）、内容生态（文章、分类、标签、单页）与运营中枢（多级导航、幻灯片、留言板）。",
+  "license": "MIT",
+  "author": "yanghang <yanghang@pinming.cn>"
+}

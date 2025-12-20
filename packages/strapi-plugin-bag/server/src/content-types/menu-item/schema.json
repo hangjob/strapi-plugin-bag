@@ -1,0 +1,66 @@
+{
+  "kind": "collectionType",
+  "collectionName": "bag_menu_items",
+  "info": {
+    "singularName": "menu-item",
+    "pluralName": "menu-items",
+    "displayName": "菜单项管理",
+    "description": "具体的菜单链接项"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {
+    "content-manager": {
+      "visible": true
+    }
+  },
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "url": {
+      "type": "string",
+      "required": true
+    },
+    "target": {
+      "type": "enumeration",
+      "enum": [
+        "_self",
+        "_blank"
+      ],
+      "default": "_self"
+    },
+    "order": {
+      "type": "integer",
+      "default": 0
+    },
+    "icon": {
+      "type": "string"
+    },
+    "isHot": {
+      "type": "boolean",
+      "default": false
+    },
+    "menu": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::strapi-plugin-bag.menu",
+      "inversedBy": "items"
+    },
+    "parent": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::strapi-plugin-bag.menu-item",
+      "inversedBy": "children"
+    },
+    "children": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "plugin::strapi-plugin-bag.menu-item",
+      "mappedBy": "parent"
+    }
+  }
+}
+

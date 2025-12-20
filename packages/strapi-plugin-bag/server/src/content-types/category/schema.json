@@ -1,0 +1,50 @@
+{
+  "kind": "collectionType",
+  "collectionName": "bag_categories",
+  "info": {
+    "singularName": "category",
+    "pluralName": "categories",
+    "displayName": "分类管理",
+    "description": "内容分类管理"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {
+    "content-manager": { "visible": true }
+  },
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "name",
+      "required": true
+    },
+    "description": {
+      "type": "text"
+    },
+    "parent": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::strapi-plugin-bag.category",
+      "inversedBy": "children"
+    },
+    "children": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "plugin::strapi-plugin-bag.category",
+      "mappedBy": "parent"
+    },
+    "articles": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "plugin::strapi-plugin-bag.article",
+      "mappedBy": "category"
+    }
+  }
+}
+

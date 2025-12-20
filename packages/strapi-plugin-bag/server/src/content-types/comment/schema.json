@@ -1,0 +1,67 @@
+{
+  "kind": "collectionType",
+  "collectionName": "bag_comments",
+  "info": {
+    "singularName": "comment",
+    "pluralName": "comments",
+    "displayName": "评论管理",
+    "description": "管理文章评论与回复"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {
+    "content-manager": {
+      "visible": true
+    }
+  },
+  "attributes": {
+    "content": {
+      "type": "text",
+      "required": true
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": [
+        "pending",
+        "approved",
+        "rejected"
+      ],
+      "default": "pending"
+    },
+    "article": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::strapi-plugin-bag.article",
+      "inversedBy": "comments"
+    },
+    "author": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user"
+    },
+    "parent": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::strapi-plugin-bag.comment",
+      "inversedBy": "children"
+    },
+    "children": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "plugin::strapi-plugin-bag.comment",
+      "mappedBy": "parent"
+    },
+    "ip": {
+      "type": "string"
+    },
+    "ua": {
+      "type": "string"
+    },
+    "isAdmin": {
+      "type": "boolean",
+      "default": false
+    }
+  }
+}
+

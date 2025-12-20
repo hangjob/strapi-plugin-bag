@@ -1,0 +1,42 @@
+{
+  "kind": "collectionType",
+  "collectionName": "bag_logs",
+  "info": {
+    "singularName": "log",
+    "pluralName": "logs",
+    "displayName": "升级日志",
+    "description": "记录系统的版本升级、功能更新及维护记录"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {
+    "content-manager": {
+      "visible": true
+    }
+  },
+  "attributes": {
+    "version": {
+      "type": "string",
+      "required": true
+    },
+    "type": {
+      "type": "enumeration",
+      "enum": [
+        "feature",
+        "fix",
+        "perf",
+        "other"
+      ],
+      "default": "feature",
+      "required": true
+    },
+    "content": {
+      "type": "richtext",
+      "required": true
+    },
+    "publishDate": {
+      "type": "date"
+    }
+  }
+}

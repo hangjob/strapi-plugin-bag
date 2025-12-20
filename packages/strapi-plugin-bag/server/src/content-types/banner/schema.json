@@ -1,0 +1,52 @@
+{
+  "kind": "collectionType",
+  "collectionName": "bag_banners",
+  "info": {
+    "singularName": "banner",
+    "pluralName": "banners",
+    "displayName": "幻灯片管理",
+    "description": "管理网站首页或各页面的轮播图、幻灯片"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {
+    "content-manager": {
+      "visible": true
+    }
+  },
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "subtitle": {
+      "type": "string"
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "link": {
+      "type": "string"
+    },
+    "order": {
+      "type": "integer",
+      "default": 0
+    },
+    "group": {
+      "type": "string",
+      "default": "home",
+      "description": "用于区分不同页面的幻灯片组，如 home, blog, about"
+    },
+    "isVisible": {
+      "type": "boolean",
+      "default": true
+    }
+  }
+}
+

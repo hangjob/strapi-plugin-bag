@@ -1,0 +1,36 @@
+{
+  "kind": "collectionType",
+  "collectionName": "captchas",
+  "info": {
+    "singularName": "captcha",
+    "pluralName": "captchas",
+    "displayName": "验证码管理",
+    "description": "存储系统生成的图片及邮件验证码"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "identifier": {
+      "type": "string",
+      "required": true
+    },
+    "code": {
+      "type": "string",
+      "required": true
+    },
+    "expiresAt": {
+      "type": "datetime",
+      "required": true
+    },
+    "isUsed": {
+      "type": "boolean",
+      "default": false
+    },
+    "type": {
+      "type": "enumeration",
+      "enum": ["email", "image"],
+      "default": "email"
+    }
+  }
+}

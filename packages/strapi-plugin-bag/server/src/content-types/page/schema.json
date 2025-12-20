@@ -1,0 +1,54 @@
+{
+  "kind": "collectionType",
+  "collectionName": "bag_pages",
+  "info": {
+    "singularName": "page",
+    "pluralName": "pages",
+    "displayName": "单页管理",
+    "description": "管理网站的固定单页，如关于我们、加入我们、协议声明等"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {
+    "content-manager": {
+      "visible": true
+    }
+  },
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "title",
+      "required": true,
+      "unique": true
+    },
+    "content": {
+      "type": "richtext"
+    },
+    "cover": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "seoTitle": {
+      "type": "string"
+    },
+    "seoKeywords": {
+      "type": "string"
+    },
+    "seoDescription": {
+      "type": "text"
+    },
+    "views": {
+      "type": "integer",
+      "default": 0
+    }
+  }
+}
+

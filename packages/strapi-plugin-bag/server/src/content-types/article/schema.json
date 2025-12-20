@@ -1,0 +1,71 @@
+{
+  "kind": "collectionType",
+  "collectionName": "bag_articles",
+  "info": {
+    "singularName": "article",
+    "pluralName": "articles",
+    "displayName": "文章管理",
+    "description": "管理网站内容文章"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {
+    "content-manager": { "visible": true }
+  },
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "title",
+      "required": true
+    },
+    "summary": {
+      "type": "text",
+      "maxLength": 500
+    },
+    "content": {
+      "type": "richtext"
+    },
+    "cover": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [ "images" ]
+    },
+    "isTop": {
+      "type": "boolean",
+      "default": false
+    },
+    "views": {
+      "type": "integer",
+      "default": 0
+    },
+    "category": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::strapi-plugin-bag.category",
+      "inversedBy": "articles"
+    },
+    "tags": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "plugin::strapi-plugin-bag.tag",
+      "mappedBy": "articles"
+    },
+    "author": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user"
+    },
+    "comments": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "plugin::strapi-plugin-bag.comment",
+      "mappedBy": "article"
+    }
+  }
+}
+

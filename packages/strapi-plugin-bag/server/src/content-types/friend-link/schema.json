@@ -1,0 +1,57 @@
+{
+  "kind": "collectionType",
+  "collectionName": "bag_friend_links",
+  "info": {
+    "singularName": "friend-link",
+    "pluralName": "friend-links",
+    "displayName": "友情链接管理",
+    "description": "管理网站合作伙伴、友情链接"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {
+    "content-manager": {
+      "visible": true
+    }
+  },
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "url": {
+      "type": "string",
+      "required": true
+    },
+    "logo": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "description": {
+      "type": "text"
+    },
+    "order": {
+      "type": "integer",
+      "default": 0
+    },
+    "category": {
+      "type": "enumeration",
+      "enum": [
+        "partner",
+        "friend",
+        "other"
+      ],
+      "default": "friend"
+    },
+    "isVisible": {
+      "type": "boolean",
+      "default": true
+    }
+  }
+}
+
