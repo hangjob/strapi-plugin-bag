@@ -17,6 +17,9 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT || 22 }}
           script: |
+            # 加载环境变量，防止找不到 pnpm/node
+            export PATH=$PATH:/usr/local/bin:/usr/bin
+            
             # 1. 进入项目目录
             cd ${{ secrets.TARGET_DIR }}
             
