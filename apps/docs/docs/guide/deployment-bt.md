@@ -140,31 +140,68 @@ jobs:
 
 ## 4. PM2 进程配置建议
 
-对于 Strapi 5 生产环境，建议在 `apps/backend` 目录下创建 `ecosystem.config.js`：
+对于 Strapi 5 生产环境，建议在项目根目录下使用 `ecosystem.config.js` 配置文件进行管理：
 
 ```javascript
 module.exports = {
   apps: [
     {
-      name: "strapi-bag",
-      script: "pnpm",
-      args: "start",
-      cwd: "./apps/backend",
+      name: "strapi-bag", // 进程名称
+      script: "pnpm", // 启动命令
+      args: "start", // 启动参数
+      cwd: "./apps/backend", // 运行目录
+      interpreter: "none", // 不使用特定解释器
       env: {
-        NODE_ENV: "production",
-        PORT: 1339,
+        NODE_ENV: "production", // 生产环境
+        PORT: 1339, // 端口号
       },
+      instances: 1,
+      autorestart: true,
+      max_memory_restart: "1G", // 内存超过 1G 自动重启
     },
   ],
 };
 ```
 
-然后在部署脚本中使用 `pm2 start ecosystem.config.js`。
+## 5. 验证部署是否成功
 
-## 5. 常见问题排查
+提交代码并推送至 GitHub 后，您可以通过以下方式确认部署状态：
 
-- **内存不足**：Strapi 编译过程比较吃内存（至少需要 2G）。如果服务器内存较小，建议在本地或 GitHub Actions 中编译好后再上传 `dist` 目录。
-- **权限问题**：确保 Webhook 或 SSH 执行的用户对项目目录有写权限。
+### A. 查看 GitHub Actions (第一现场)
+
+- 前往 GitHub 仓库的 **Actions** 选项卡。
+- 检查 `Deploy to BT Server` 工作流是否显示为绿色勾勾。如果为红色，点击进入查看报错日志。
+
+### B. 查看 PM2 在线时间
+
+在服务器终端运行：
+
+```bash
+pm2 list
+```
+
+检查 `strapi-bag` 的 **uptime** 列。如果时间很短（如 `1m`），说明自动化脚本刚刚成功触发了重启。
+
+### C. 检查代码同步状态
+
+在服务器项目目录下运行：
+
+```bash
+git log -1
+```
+
+确认最后一条提交记录是否与您在本地推送的内容一致。
+
+### D. 实时监控 (进阶)
+
+在服务器终端运行 `pm2 monit`，您可以实时观察到部署脚本触发服务重启的瞬间。
+
+## 6. 常见问题排查
+
+- **端口未放行**：修改端口（如 1339）后，务必在宝塔面板的“安全”设置中手动放行。
+- **内存不足**：Strapi 编译较吃内存（至少 2G）。若服务器配置较低，编译可能失败，建议开启虚拟内存或本地编译。
+- **SSH 权限**：若 `git pull` 报错，通常是服务器 SSH Key 未正确添加至 GitHub 的 Deploy Keys。
+- **分支匹配**：默认监听 `main` 分支，推送到其他分支不会触发部署。
 - **环境变量**：生产环境务必在服务器上配置好 `.env` 文件，不要将其上传到 GitHub。
 
 > [!TIP]
