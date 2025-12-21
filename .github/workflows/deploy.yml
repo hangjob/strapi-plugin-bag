@@ -17,23 +17,23 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT || 22 }}
           script: |
-            # 自动寻找并导出 Node.js 和 pnpm 的路径
-            export NODE_PATH=$(dirname $(which node))
-            export PATH=$PATH:$NODE_PATH:/usr/local/bin:/usr/bin
+            # 兼容宝塔面板的路径加载
+            export PATH=$PATH:/usr/local/bin:/usr/bin:/root/bin
+            # 尝试加载宝塔默认的 Node.js 路径
+            export PATH=$PATH:$(find /www/server/nodejs -maxdepth 3 -type d -name "bin" 2>/dev/null | head -n 1)
             
             cd ${{ secrets.TARGET_DIR }}
             
             # 1. 拉取最新代码
             git pull origin main
             
-            # 2. 安装依赖
+            # 2. 安装依赖 (使用绝对路径或已加载的 PATH)
             pnpm install --no-frozen-lockfile
             
             # 3. 编译项目
             pnpm build
             
             # 4. 重启服务
-            # 如果 pm2 报找不到 pnpm，我们强制使用绝对路径或通过 pnpm 启动
             pm2 reload ecosystem.config.js || pm2 start ecosystem.config.js
 
             echo "🚀 部署完成！"
