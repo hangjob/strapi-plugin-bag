@@ -15,41 +15,43 @@
 
 为了让服务器能够免密拉取 GitHub 上的私有仓库，您需要按照以下步骤配置 SSH Key：
 
-### 1. 生成 SSH Key
+### 1. 生成 SSH Key (公钥与私钥)
 
-在服务器终端执行：
+在服务器终端执行以下命令，**一路按回车**即可（不要设置密码，否则自动化脚本会阻塞）：
 
 ```bash
-ls -al ~/.ssh # 查看是否已有
+# 检查是否已有 Key
+ls -al ~/.ssh
+
+# 生成新 Key (若提示文件已存在可跳过或覆盖)
 ssh-keygen -t rsa -b 4096 -C "您的邮箱@example.com"
 ```
 
-一路按 **回车** 即可（不要设置密码，否则自动化脚本会阻塞）。
+### 2. 获取并配置“公钥” (用于 GitHub 仓库访问)
 
-### 2. 获取公钥
+公钥相当于“门锁”，安装在 GitHub 上：
 
-执行以下命令并复制输出的完整内容：
+1.  **查看公钥**：执行 `cat ~/.ssh/id_rsa.pub` 并复制内容。
+2.  **配置 GitHub**：进入项目仓库 -> **Settings** -> **Deploy keys** -> **Add deploy key**。
+3.  **Title** 填写“宝塔服务器”，**Key** 粘贴内容，点击 **Add key**。
 
-```bash
-cat ~/.ssh/id_rsa.pub
-```
+### 3. 获取并配置“私钥” (用于 GitHub Actions 登录服务器)
 
-### 3. 在 GitHub 中配置
+私钥相当于“钥匙”，交给 GitHub Actions 保管：
 
-1. 登录 GitHub，进入您的项目仓库。
-2. 前往 **Settings** -> **Deploy keys** -> **Add deploy key**。
-3. **Title** 填写“宝塔服务器”，**Key** 粘贴刚才复制的内容。
-4. 点击 **Add key**。
+1.  **查看私钥**：执行 `cat ~/.ssh/id_rsa` 并复制**全部内容**（必须包含 `-----BEGIN...` 和 `-----END...`）。
+2.  **配置 Secrets**：进入项目仓库 -> **Settings** -> **Secrets and variables** -> **Actions** -> **New repository secret**。
+3.  **Name** 填写 `SSH_PRIVATE_KEY`，**Value** 粘贴内容，点击 **Add secret**。
 
-### 4. 首次连接测试
+### 4. 首次连接测试 (必须手动执行)
 
-在服务器终端执行：
+为了让服务器信任 GitHub，必须在服务器终端手动执行一次：
 
 ```bash
 ssh -T git@github.com
 ```
 
-看到 `Hi [用户名]! You've successfully authenticated...` 即表示配置成功。
+看到 `Are you sure you want to continue connecting (yes/no)?` 时，输入 **yes** 并回车。看到 `Hi [用户名]!` 即表示配置成功。
 
 ---
 
