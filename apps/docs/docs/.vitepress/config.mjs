@@ -52,7 +52,8 @@ export default defineConfig({
           { text: 'Turborepo 使用指南', link: '/guide/turborepo-usage' },
           { text: '插件事件钩子', link: '/guide/hook-system' },
           { text: '自定义API响应格式', link: '/guide/api-customization' },
-          { text: '自定义字段类型', link: '/guide/custom-fields' }
+          { text: '自定义字段类型', link: '/guide/custom-fields' },
+          { text: '宝塔自动化部署', link: '/guide/deployment-bt' }
         ]
       }
     ],

@@ -42,7 +42,7 @@
 ### 示例请求
 
 ```bash
-GET http://localhost:1337/api/bag/menus/main-nav
+GET http://localhost:1339/api/bag/menus/main-nav
 ```
 
 ### 响应示例
