@@ -110,17 +110,18 @@ GitHub 为了安全，不会直接在页面上显示 IP 等输入框。您需要
 在项目根目录创建 `.github/workflows/deploy.yml`：
 
 ```yaml
-name: Deploy to Server
+name: Deploy to BT Server
 
 on:
   push:
-    branches: [main] # 只有主分支提交时触发
+    branches: [main] # 当代码推送到 main 分支时触发
+  workflow_dispatch: # 允许手动触发
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: SSH Deploy
+      - name: SSH Remote Deployment
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.REMOTE_HOST }}
@@ -128,19 +129,69 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT || 22 }}
           script: |
+            # 兼容宝塔面板的路径加载
+            export PATH=$PATH:/usr/local/bin:/usr/bin:/root/bin
+            # 自动加载宝塔默认的 Node.js 路径
+            export PATH=$PATH:$(find /www/server/nodejs -maxdepth 3 -type d -name "bin" 2>/dev/null | head -n 1)
+
             cd ${{ secrets.TARGET_DIR }}
+
             # 1. 拉取最新代码
             git pull origin main
+
             # 2. 安装依赖
-            pnpm install
-            # 3. 编译插件和后端
+            pnpm install --no-frozen-lockfile
+
+            # 3. 构建项目 (Turborepo 并行构建)
             pnpm build
-            # 4. 使用 PM2 重启服务
-            # 假设您的 PM2 任务名为 strapi-app
-            pm2 restart strapi-app || pm2 start npm --name "strapi-app" -- run start --prefix apps/backend
+
+            # 4. 重启服务 (使用配置文件)
+            pm2 reload ecosystem.config.js || pm2 start ecosystem.config.js
+
+            echo "🚀 部署完成！"
 ```
 
-## 3. 使用宝塔 Webhook (简易版)
+## 3. 宝塔面板部署避坑指南 (重要)
+
+在使用宝塔面板进行自动化部署时，您可能会遇到以下常见报错。请根据实际情况执行修复命令：
+
+### A. 报错：`ssh: no key found`
+
+- **原因**：GitHub Secrets 中的 `SSH_PRIVATE_KEY` 格式不正确。
+- **修复**：确保粘贴的内容**包含**以下开头和结尾行，且中间没有任何多余的空格：
+  ```text
+  -----BEGIN OPENSSH PRIVATE KEY-----
+  ...
+  -----END OPENSSH PRIVATE KEY-----
+  ```
+
+### B. 报错：`handshake failed: [none publickey]`
+
+- **原因**：服务器未将该密钥加入信任列表，或权限设置不当。
+- **修复**：在服务器终端执行：
+  ```bash
+  # 1. 强行建立信任
+  cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+  # 2. 修正权限 (关键)
+  chmod 700 ~/.ssh
+  chmod 600 ~/.ssh/authorized_keys
+  # 3. 重启 SSH 服务
+  systemctl restart sshd
+  ```
+
+### C. 报错：`pnpm: command not found`
+
+- **原因**：非交互式 SSH 环境无法识别宝塔安装的 Node/pnpm 路径。
+- **修复**：在服务器终端建立系统级软链接：
+  ```bash
+  ln -sf $(which pnpm) /usr/bin/pnpm
+  ln -sf $(which node) /usr/bin/node
+  ln -sf $(which pm2) /usr/bin/pm2
+  ```
+
+---
+
+## 4. 使用宝塔 Webhook (简易版)
 
 如果您不想配置复杂的 SSH，可以使用宝塔自带的 **Webhook** 插件。
 
@@ -216,7 +267,50 @@ git log -1
 
 在服务器终端运行 `pm2 monit`，您可以实时观察到部署脚本触发服务重启的瞬间。
 
-## 6. 常见问题排查
+## 6. 域名访问与反向代理 (Nginx)
+
+为了通过域名（如 `api.yourdomain.com`）访问 Strapi，建议在宝塔中使用“反向代理”方案。
+
+### 第一步：创建站点
+
+1.  前往宝塔面板 -> **网站** -> **添加站点**。
+2.  **域名**：填写您的真实域名。
+3.  **PHP版本**：选择“纯静态”。
+4.  点击提交。
+
+### 第二步：配置反向代理
+
+1.  在站点列表中点击刚才创建的域名 -> **设置**。
+2.  点击 **反向代理** -> **添加反向代理**。
+3.  **代理名称**：填写 `strapi`。
+4.  **目标URL**：填写 `http://127.0.0.1:1339`（确保端口与 `ecosystem.config.js` 一致）。
+5.  点击提交。
+
+### 第三步：开启 HTTPS (可选)
+
+1.  在站点设置中点击 **SSL**。
+2.  选择 **Let's Encrypt**，勾选域名并申请。
+3.  申请成功后开启 **“强制HTTPS”**。
+
+![宝塔反向代理配置](/screenshots/bt-reverse-proxy.png)
+
+## 7. 部署建议：为什么不使用宝塔的“Node项目”模块？
+
+在部署 Strapi 5 Monorepo 项目时，我们**强烈建议**通过 PM2 命令行管理，而不是使用宝塔面板自带的“Node项目”模块。
+
+**原因如下：**
+
+- **路径限制**：Strapi 5 的核心在 `apps/backend`，宝塔的 Node 模块往往无法正确识别这种深层路径。
+- **启动逻辑**：Strapi 需要 `pnpm start` 配合特定的环境变量，宝塔默认的启动逻辑经常报错。
+- **自动化冲突**：GitHub Actions 是直接通过 PM2 命令行操作的。如果同时使用宝塔的 UI 模块，会导致端口占用或进程冲突。
+
+**最佳实践**：
+
+1. 使用 **PM2 (命令行)** 守护进程。
+2. 使用 **PHP项目 (静态站点)** 做 Nginx 反向代理。
+3. 使用 **GitHub Actions** 自动化运维。
+
+## 8. 常见问题排查
 
 - **端口未放行**：修改端口（如 1339）后，务必在宝塔面板的“安全”设置中手动放行。
 - **内存不足**：Strapi 编译较吃内存（至少 2G）。若服务器配置较低，编译可能失败，建议开启虚拟内存或本地编译。
