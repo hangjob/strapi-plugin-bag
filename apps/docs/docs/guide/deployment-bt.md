@@ -43,7 +43,25 @@ ssh-keygen -t rsa -b 4096 -C "您的邮箱@example.com"
 2.  **配置 Secrets**：进入项目仓库 -> **Settings** -> **Secrets and variables** -> **Actions** -> **New repository secret**。
 3.  **Name** 填写 `SSH_PRIVATE_KEY`，**Value** 粘贴内容，点击 **Add secret**。
 
-### 4. 首次连接测试 (必须手动执行)
+### 4. 允许通过密钥登录服务器 (重要)
+
+GitHub Actions 是通过 SSH 协议“登录”您的服务器来执行脚本的，因此必须将公钥加入服务器的信任列表：
+
+1.  **添加至信任列表**：在服务器终端执行：
+    ```bash
+    cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+    ```
+2.  **设置权限**（SSH 对文件权限要求极严，若权限过大将导致连接失败）：
+    ```bash
+    chmod 700 ~/.ssh
+    chmod 600 ~/.ssh/authorized_keys
+    ```
+3.  **宝塔面板配置**：
+    - 前往宝塔面板 -> **安全** -> **SSH管理**。
+    - 确保“SSH服务”已开启。
+    - 登录方式建议选择 **“密码+密钥”**。
+
+### 5. 首次连接测试 (必须手动执行)
 
 为了让服务器信任 GitHub，必须在服务器终端手动执行一次：
 
